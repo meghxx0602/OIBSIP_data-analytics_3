@@ -138,7 +138,8 @@ Contains pre-processed user review text with sentiment labels.
 The MySQL database `google_play_store` contains two relational tables joined via `App_ID`:
 
 ```sql
-apps (
+# Initial Schema apps - Import Friendly
+apps(
     App_ID INT AUTO_INCREMENT PRIMARY KEY,
     App VARCHAR(255),
     Category VARCHAR(100),
@@ -155,7 +156,34 @@ apps (
     Android_Ver VARCHAR(50)
 )
 
-user_reviews (
+# Final apps schema with datatype update after import
+ ALTER TABLE apps(
+ MODIFY App VARCHAR(255) NOT NULL,
+ MODIFY Category VARCHAR(100),
+ MODIFY Rating FLOAT,
+ MODIFY Reviews INT,
+ MODIFY Size VARCHAR(50),
+ MODIFY Installs VARCHAR(50),
+ MODIFY Type ENUM('Free','Paid'),
+ MODIFY Price DECIMAL(10,2),
+ MODIFY Content_Rating VARCHAR(50),
+ MODIFY Genres VARCHAR(100),
+ MODIFY Last_Updated DATE,
+ MODIFY Current_Ver VARCHAR(50),
+ MODIFY Android_Ver VARCHAR(50)
+)
+
+# Initial Schema user_reviews - Import Friendly
+user_reviews(
+ Review_ID INT AUTO_INCREMENT PRIMARY KEY,
+ App VARCHAR(255) NOT NULL,
+ Translated_Review TEXT,
+ Sentiment VARCHAR(20),
+ Sentiment_Polarity VARCHAR(50),       -- keep VARCHAR for import
+ Sentiment_Subjectivity VARCHAR(50)    -- keep VARCHAR for import
+
+Final user_reviews schema with datatype update after import
+user_reviews(
     Review_ID INT AUTO_INCREMENT PRIMARY KEY,
     App VARCHAR(255),
     Translated_Review TEXT,
