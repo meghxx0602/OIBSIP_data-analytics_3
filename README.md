@@ -390,4 +390,26 @@ All charts are saved in `EDA_Visualization_Reports/` and documented in the Word 
 | **Excel / Charting** | Visualization of query outputs |
 
 
+## 📄 License
+
+This project is part of the OIBSIP (Oasis Infobyte Summer Internship Program) Data Analytics curriculum.
+
+
+## 👨‍💻 Author
+
+*meghxx0602*
+
+
+## 🔗 References
+
+- *Course*: Understanding Data Visualization & Data Analytics  
+- *Project Type*: Academic Research & Data Analytics  
+- *Dataset Source*: Google Play Store Public Data  
+
+
+## 📞 Support
+
+For questions or issues related to this project, please refer to the query files and schema documentation provided in the repository.
+
+
 *Internship: Oasis Infobyte | Level 2 Data Analytics | Project 3*
