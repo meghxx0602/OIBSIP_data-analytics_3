@@ -8,13 +8,13 @@ A complete **SQL-only** exploratory data analysis (EDA) of the Google Play Store
 ## 📑 Table of Contents
 
 - [Project Overview](#project-overview)
-- [Quick Findings (Short EDA Report)](#quick-findings-short-eda-report)
 - [Repository Structure](#repository-structure)
 - [Datasets](#datasets)
 - [Database Schema](#database-schema)
 - [SQL Workflow](#sql-workflow)
 - [Analysis Sections](#analysis-sections)
 - [Sample Queries (High-Impact)](#sample-queries-high-impact)
+- [Quick Findings (Short EDA Report)](#quick-findings-short-eda-report)
 - [Interactive Visualization](#interactive-visualization)
 - [EDA Visualizations](#eda-visualizations)
 - [Setup & Usage](#setup--usage)
@@ -63,19 +63,9 @@ Key questions answered:
 - Do highly-rated apps receive more positive reviews?
 
 
-## Quick Findings (Short EDA Report)
-
-These are **high-level takeaways** based on the queries and charts included in `google_play_store_queries.sql` and the artifacts inside `EDA_Visualization_Reports/`.
-
-- **Category dominance & engagement:** A small number of categories contribute a large share of apps, and engagement (review volume) is not always proportional to app count.
-- **Ratings vs. sentiment:** Some categories show strong alignment between average rating and average sentiment polarity, while others indicate a mismatch (good rating but mixed sentiment, or vice versa).
-- **Popularity vs. quality:** Higher installs do not always imply higher ratings—correlation is not guaranteed and should be interpreted with review counts.
-- **Monetization patterns:** Paid apps exist across many categories, but average paid pricing varies significantly by category.
-- **Sentiment mix:** Overall sentiment typically clusters into Positive/Neutral/Negative buckets, and per-category sentiment breakdown highlights where user experience issues may be concentrated.
-
-
 ## Repository Structure
 
+```
 OIBSIP_data-analytics_3/
 │
 ├── google_play_store_apps_schema.sql          # Creates & cleans the apps table
@@ -323,6 +313,17 @@ ORDER BY a.Rating DESC;
 **Importance:** Tests whether star ratings align with sentiment and validates rating reliability.
 
 
+## Quick Findings (Short EDA Report)
+
+These are **high-level takeaways** based on the queries and charts included in `google_play_store_queries.sql` and the artifacts inside `EDA_Visualization_Reports/`.
+
+- **Category dominance & engagement:** A small number of categories contribute a large share of apps, and engagement (review volume) is not always proportional to app count.
+- **Ratings vs. sentiment:** Some categories show strong alignment between average rating and average sentiment polarity, while others indicate a mismatch (good rating but mixed sentiment, or vice versa).
+- **Popularity vs. quality:** Higher installs do not always imply higher ratings—correlation is not guaranteed and should be interpreted with review counts.
+- **Monetization patterns:** Paid apps exist across many categories, but average paid pricing varies significantly by category.
+- **Sentiment mix:** Overall sentiment typically clusters into Positive/Neutral/Negative buckets, and per-category sentiment breakdown highlights where user experience issues may be concentrated.
+
+  
 ## Interactive Visualization
 
 All charts are generated from SQL outputs and saved in `EDA_Visualization_Reports/`.
