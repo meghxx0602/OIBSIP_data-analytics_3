@@ -4,7 +4,6 @@
 
 A complete **SQL-only** exploratory data analysis (EDA) of the Google Play Store, covering app metadata and user reviews. The project performs end-to-end data cleaning, relational mapping, category exploration, metrics analysis, and sentiment analysis—then turns outputs into **compelling visualizations** (charts/heatmaps) documented in the reports.
 
----
 
 ## 📑 Table of Contents
 
@@ -21,7 +20,6 @@ A complete **SQL-only** exploratory data analysis (EDA) of the Google Play Store
 - [Setup & Usage](#setup--usage)
 - [Tools Used](#tools-used)
 
----
 
 ## Project Overview
 
@@ -64,11 +62,10 @@ Key questions answered:
 - What is the overall and per-category sentiment of user reviews?
 - Do highly-rated apps receive more positive reviews?
 
----
 
 ## Quick Findings (Short EDA Report)
 
-> These are **high-level takeaways** based on the queries and charts included in `google_play_store_queries.sql` and the artifacts inside `EDA_Visualization_Reports/`.
+These are **high-level takeaways** based on the queries and charts included in `google_play_store_queries.sql` and the artifacts inside `EDA_Visualization_Reports/`.
 
 - **Category dominance & engagement:** A small number of categories contribute a large share of apps, and engagement (review volume) is not always proportional to app count.
 - **Ratings vs. sentiment:** Some categories show strong alignment between average rating and average sentiment polarity, while others indicate a mismatch (good rating but mixed sentiment, or vice versa).
@@ -76,11 +73,9 @@ Key questions answered:
 - **Monetization patterns:** Paid apps exist across many categories, but average paid pricing varies significantly by category.
 - **Sentiment mix:** Overall sentiment typically clusters into Positive/Neutral/Negative buckets, and per-category sentiment breakdown highlights where user experience issues may be concentrated.
 
----
 
 ## Repository Structure
 
-```
 OIBSIP_data-analytics_3/
 │
 ├── google_play_store_apps_schema.sql          # Creates & cleans the apps table
@@ -114,7 +109,6 @@ OIBSIP_data-analytics_3/
     └── Top 10 Apps by Number of Reviews .jpeg
 ```
 
----
 
 ## Datasets
 
@@ -148,7 +142,6 @@ Contains pre-processed user review text with sentiment labels.
 | `Sentiment_Polarity` | Polarity score (−1.0 to 1.0) |
 | `Sentiment_Subjectivity` | Subjectivity score (0.0 to 1.0) |
 
----
 
 ## Database Schema
 
@@ -183,7 +176,6 @@ user_reviews (
 )
 ```
 
----
 
 ## SQL Workflow
 
@@ -198,9 +190,8 @@ Execute the SQL files in the following order:
 | 5 | `google_play_store_debugtoaddfk.sql` | Add `App_ID` foreign key to `user_reviews` for relational mapping |
 | 6 | `google_play_store_queries.sql` | Run all EDA queries (cleaning + exploration + metrics + sentiment) |
 
-> **Note:** Update the `LOAD DATA INFILE` paths in the import scripts to match your local MySQL upload directory before running.
+**Note:** Update the `LOAD DATA INFILE` paths in the import scripts to match your local MySQL upload directory before running.
 
----
 
 ## Analysis Sections
 
@@ -233,11 +224,10 @@ Execute the SQL files in the following order:
 - Correlation: high-rated apps → more positive reviews?
 - Reviews vs. Installs correlation (heatmap prep)
 
----
 
 ## Sample Queries (High-Impact)
 
-> All queries below are taken from **`google_play_store_queries.sql`** and represent the most important outputs used for charts/insights.
+All queries below are taken from **`google_play_store_queries.sql`** and represent the most important outputs used for charts/insights.
 
 ### A) Data Cleaning (Accuracy + Correct Types)
 
@@ -332,7 +322,6 @@ ORDER BY a.Rating DESC;
 ```
 **Importance:** Tests whether star ratings align with sentiment and validates rating reliability.
 
----
 
 ## Interactive Visualization
 
@@ -344,9 +333,8 @@ All charts are generated from SQL outputs and saved in `EDA_Visualization_Report
 - **Correlation:** installs vs rating, reviews vs installs (scatter/heatmap)
 - **Trends:** size vs rating, pricing by category (line/bar)
 
-> Each visualization is mapped to a question and backed by a query for clean storytelling.
+Each visualization is mapped to a question and backed by a query for clean storytelling.
 
----
 
 ## EDA Visualizations
 
@@ -366,7 +354,6 @@ All charts are saved in `EDA_Visualization_Reports/` and documented in the Word 
 | Category Wise Paid Apps Ratio | Pie | Monetization strategy by category |
 | Heatmap (Reviews vs Installs) | Heatmap (PDF) | Correlation matrix of key numeric metrics |
 
----
 
 ## Setup & Usage
 
@@ -391,7 +378,6 @@ All charts are saved in `EDA_Visualization_Reports/` and documented in the Word 
 
 5. **Review the reports** in the `EDA_Visualization_Reports/` folder
 
----
 
 ## Tools Used
 
@@ -402,6 +388,5 @@ All charts are saved in `EDA_Visualization_Reports/` and documented in the Word 
 | **Microsoft Word** | EDA and visualization reports |
 | **Excel / Charting** | Visualization of query outputs |
 
----
 
 *Internship: Oasis Infobyte | Level 2 Data Analytics | Project 3*
