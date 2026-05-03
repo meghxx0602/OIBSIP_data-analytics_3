@@ -2,18 +2,21 @@
 
 **OIBSIP Internship – Level 2 Data Analytics | Project 3**
 
-A complete **SQL-only** exploratory data analysis (EDA) of the Google Play Store, covering app metadata and user reviews. The project performs end-to-end data cleaning, relational mapping, category exploration, metrics analysis, and sentiment analysis — all within MySQL — with results documented in professional EDA and visualization reports.
+A complete **SQL-only** exploratory data analysis (EDA) of the Google Play Store, covering app metadata and user reviews. The project performs end-to-end data cleaning, relational mapping, category exploration, metrics analysis, and sentiment analysis—then turns outputs into **compelling visualizations** (charts/heatmaps) documented in the reports.
 
 ---
 
 ## 📑 Table of Contents
 
 - [Project Overview](#project-overview)
+- [Quick Findings (Short EDA Report)](#quick-findings-short-eda-report)
 - [Repository Structure](#repository-structure)
 - [Datasets](#datasets)
 - [Database Schema](#database-schema)
 - [SQL Workflow](#sql-workflow)
 - [Analysis Sections](#analysis-sections)
+- [Sample Queries (High-Impact)](#sample-queries-high-impact)
+- [Interactive Visualization](#interactive-visualization)
 - [EDA Visualizations](#eda-visualizations)
 - [Setup & Usage](#setup--usage)
 - [Tools Used](#tools-used)
@@ -29,6 +32,30 @@ A complete **SQL-only** exploratory data analysis (EDA) of the Google Play Store
 | **Datasets** | `apps.csv` (app metadata) + `user_reviews.csv` (user feedback) |
 | **Outcome** | Clean relational dataset, query-driven insights, and professional EDA reports |
 
+### ✅ Key focus areas (Project Objectives)
+
+1) **Data Preparation:**  
+   Clean and correct data types for accuracy.
+
+2) **Category Exploration:**  
+   Investigate app distribution across categories.
+
+3) **Metrics Analysis:**  
+   Examine app ratings, size, popularity, and pricing trends.
+
+4) **Sentiment Analysis:**  
+   Assess user sentiments through reviews.
+
+5) **Interactive Visualization:**  
+   Utilize query outputs to produce **compelling visualizations** (bar, pie, scatter, line, heatmap) and present insights clearly.
+
+6) **Skill Enhancement (Data Visualization Course Integration):**  
+   Integrate best practices from the **“Understanding Data Visualization”** course, such as:
+   - choosing the right chart for the question (comparison vs. distribution vs. correlation)
+   - using clear labels/titles and consistent scales
+   - reducing clutter and focusing on the insight
+   - linking **Query → Chart → Insight** for clean storytelling
+
 Key questions answered:
 - Which categories dominate the Play Store?
 - How do ratings, installs, and reviews correlate?
@@ -36,6 +63,18 @@ Key questions answered:
 - How does app size affect ratings?
 - What is the overall and per-category sentiment of user reviews?
 - Do highly-rated apps receive more positive reviews?
+
+---
+
+## Quick Findings (Short EDA Report)
+
+> These are **high-level takeaways** based on the queries and charts included in `google_play_store_queries.sql` and the artifacts inside `EDA_Visualization_Reports/`.
+
+- **Category dominance & engagement:** A small number of categories contribute a large share of apps, and engagement (review volume) is not always proportional to app count.
+- **Ratings vs. sentiment:** Some categories show strong alignment between average rating and average sentiment polarity, while others indicate a mismatch (good rating but mixed sentiment, or vice versa).
+- **Popularity vs. quality:** Higher installs do not always imply higher ratings—correlation is not guaranteed and should be interpreted with review counts.
+- **Monetization patterns:** Paid apps exist across many categories, but average paid pricing varies significantly by category.
+- **Sentiment mix:** Overall sentiment typically clusters into Positive/Neutral/Negative buckets, and per-category sentiment breakdown highlights where user experience issues may be concentrated.
 
 ---
 
@@ -193,6 +232,119 @@ Execute the SQL files in the following order:
 - Average polarity & subjectivity per app and per category
 - Correlation: high-rated apps → more positive reviews?
 - Reviews vs. Installs correlation (heatmap prep)
+
+---
+
+## Sample Queries (High-Impact)
+
+> All queries below are taken from **`google_play_store_queries.sql`** and represent the most important outputs used for charts/insights.
+
+### A) Data Cleaning (Accuracy + Correct Types)
+
+**1) Clean Installs (remove `+` and `,`)**
+```sql
+UPDATE apps
+SET Installs = REPLACE(REPLACE(Installs, '+', ''), ',', '');
+```
+**Importance:** Makes installs numeric so you can compute correlations, sorting, and comparisons correctly.
+
+**2) Convert Size to numeric (handle "Varies with device")**
+```sql
+UPDATE apps
+SET Size = NULL
+WHERE Size IN ('Varies with device', '', 'NaN', 'nan');
+
+ALTER TABLE apps
+MODIFY Size FLOAT;
+```
+**Importance:** Prevents invalid values from breaking analysis and enables size vs rating / size vs installs trends.
+
+### B) Category Exploration (Distribution + Engagement)
+
+**1) Category-wise app count + review count**
+```sql
+SELECT a.Category,
+       COUNT(DISTINCT a.App_ID) AS App_Count,
+       COUNT(ur.Review_ID) AS Review_Count
+FROM apps a
+LEFT JOIN user_reviews ur ON a.App_ID = ur.App_ID
+GROUP BY a.Category
+ORDER BY App_Count DESC;
+```
+**Importance:** Identifies dominant categories and which categories generate the most engagement.
+
+**2) Avg rating vs avg sentiment polarity per category**
+```sql
+SELECT a.Category,
+       ROUND(AVG(a.Rating),2) AS Avg_Rating,
+       ROUND(AVG(ur.Sentiment_Polarity),3) AS Avg_Polarity
+FROM apps a
+JOIN user_reviews ur ON a.App_ID = ur.App_ID
+WHERE a.Rating IS NOT NULL AND ur.Sentiment_Polarity IS NOT NULL
+GROUP BY a.Category
+ORDER BY Avg_Rating DESC;
+```
+**Importance:** Compares objective ratings with subjective sentiment to reveal categories where user sentiment may differ from star ratings.
+
+### C) Metrics Analysis (Popularity, Pricing, Size)
+
+**1) Rating vs Installs (scatter prep)**
+```sql
+SELECT a.App, a.Rating, a.Installs, COUNT(ur.Review_ID) AS Review_Count
+FROM apps a
+LEFT JOIN user_reviews ur ON a.App_ID = ur.App_ID
+WHERE a.Rating IS NOT NULL AND a.Installs IS NOT NULL
+GROUP BY a.App, a.Rating, a.Installs;
+```
+**Importance:** Helps analyze whether popularity (installs) is associated with quality (rating), while also capturing engagement (review count).
+
+**2) Pricing trends: Avg paid price per category**
+```sql
+SELECT a.Category, ROUND(AVG(a.Price),2) AS Avg_Price
+FROM apps a
+WHERE a.Type = 'Paid'
+GROUP BY a.Category
+ORDER BY Avg_Price DESC;
+```
+**Importance:** Highlights categories where users pay more—useful for monetization insights.
+
+### D) Sentiment Analysis (User Voice + Satisfaction)
+
+**1) Overall sentiment distribution**
+```sql
+SELECT ur.Sentiment, COUNT(*) AS Review_Count
+FROM user_reviews ur
+GROUP BY ur.Sentiment;
+```
+**Importance:** Gives an overall snapshot of user satisfaction across the dataset.
+
+**2) High-rated apps → more positive reviews?**
+```sql
+SELECT a.App, a.Rating,
+       SUM(CASE WHEN ur.Sentiment = 'Positive' THEN 1 ELSE 0 END) AS Positive_Reviews,
+       SUM(CASE WHEN ur.Sentiment = 'Negative' THEN 1 ELSE 0 END) AS Negative_Reviews,
+       SUM(CASE WHEN ur.Sentiment = 'Neutral' THEN 1 ELSE 0 END) AS Neutral_Reviews
+FROM apps a
+JOIN user_reviews ur ON a.App_ID = ur.App_ID
+WHERE a.Rating IS NOT NULL
+GROUP BY a.App, a.Rating
+ORDER BY a.Rating DESC;
+```
+**Importance:** Tests whether star ratings align with sentiment and validates rating reliability.
+
+---
+
+## Interactive Visualization
+
+All charts are generated from SQL outputs and saved in `EDA_Visualization_Reports/`.
+
+**Visualization approach (course-aligned):**
+- **Comparison:** category ranking charts (bar charts)
+- **Distribution:** sentiment breakdown (pie charts)
+- **Correlation:** installs vs rating, reviews vs installs (scatter/heatmap)
+- **Trends:** size vs rating, pricing by category (line/bar)
+
+> Each visualization is mapped to a question and backed by a query for clean storytelling.
 
 ---
 
